@@ -1,0 +1,12 @@
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.models.matches import Matches
+from app.schemas.match import MatchCreate, MatchResponse
+
+async def create_match(session: AsyncSession, data: MatchCreate):
+    match = Matches(map_name=data.map_name,
+                    played_at=data.played_at,
+                    duration_seconds=data.duration_seconds)
+    session.add(match)
+    await session.commit()
+    await session.refresh(match)
+    return match
